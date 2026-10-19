@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Surat Keterangan Selesai Magang')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>Surat Keterangan Selesai Magang</h1>
-        <div class="subtitle">{{ $isAdmin ? 'Daftar dan penerbitan surat keterangan bagi mahasiswa yang telah menyelesaikan program magang.' : 'Unduh dan cetak surat keterangan selesai magang dari Bank Syariah Indonesia Area Yogyakarta.' }}</div>
-    </div>
-</div>
+<x-topbar title="Surat Keterangan Selesai Magang" :subtitle="$isAdmin ? 'Daftar dan penerbitan surat keterangan bagi mahasiswa yang telah menyelesaikan program magang.' : 'Unduh dan cetak surat keterangan selesai magang dari Bank Syariah Indonesia Area Yogyakarta.'" />
 
 @if (session('success') || session('error'))
     <div class="flash" style="{{ session('error') ? 'background:var(--danger-bg); color:var(--danger); border-color:#efc0b9;' : '' }}">

@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Pendaftar & Mahasiswa Magang')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>Daftar Mahasiswa Magang</h1>
-        <div class="subtitle">Kelola pendaftaran, verifikasi berkas cabang, penempatan cabang/unit, dan pelaporan administratif RO Pusat.</div>
-    </div>
-</div>
+<x-topbar title="Daftar Mahasiswa Magang" subtitle="Kelola pendaftaran, verifikasi berkas cabang, penempatan cabang/unit, dan pelaporan administratif RO Pusat." />
 
 <div id="flash-container">
     @if (session('success'))

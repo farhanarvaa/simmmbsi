@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Laporan Akhir Magang')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>Laporan Akhir Magang</h1>
-        <div class="subtitle">{{ $isAdmin ? 'Tinjau, periksa, dan verifikasi dokumen laporan akhir seluruh mahasiswa magang.' : 'Unggah dan pantau status verifikasi dokumen laporan akhir magang Anda di BSI.' }}</div>
-    </div>
-</div>
+<x-topbar title="Laporan Akhir Magang" :subtitle="$isAdmin ? 'Tinjau, periksa, dan verifikasi dokumen laporan akhir seluruh mahasiswa magang.' : 'Unggah dan pantau status verifikasi dokumen laporan akhir magang Anda di BSI.'" />
 
 @if (session('success'))
     <div class="flash">

@@ -131,7 +131,7 @@ class MahasiswaController extends Controller
             ]
         );
 
-        return view('pages.lengkapi-profil', compact('user', 'mahasiswa'));
+        return view('pages.mahasiswa.lengkapiprofil', compact('user', 'mahasiswa'));
     }
 
     /**
@@ -220,7 +220,7 @@ class MahasiswaController extends Controller
             return redirect()->route('mahasiswa.dashboard');
         }
 
-        return view('pages.upload-berkas', compact('user', 'mahasiswa'));
+        return view('pages.mahasiswa.uploadberkas', compact('user', 'mahasiswa'));
     }
 
     /**

@@ -3,18 +3,14 @@
 @section('title', 'SIMMM - Manajemen Akun Admin & Mentor')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>Manajemen Akun Admin/Mentor</h1>
-        <div class="subtitle">Kelola daftar akun pengelola, admin cabang, dan mentor pembimbing magang BSI.</div>
-    </div>
-    <div class="topbar-actions">
+<x-topbar title="Manajemen Akun Admin/Mentor" subtitle="Kelola daftar akun pengelola, admin cabang, dan mentor pembimbing magang BSI.">
+    <x-slot:actions>
         <button type="button" class="btn btn-solid" onclick="openTambahAdminModal()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <span>Tambah Akun Admin/Mentor</span>
         </button>
-    </div>
-</div>
+    </x-slot:actions>
+</x-topbar>
 
 <div id="flash-container">
     @if (session('success'))

@@ -33,7 +33,7 @@ class PenempatanController extends Controller
 
         $cabangs = Cabang::orderBy('nama')->get();
 
-        return view('pages.penempatan', compact('mahasiswas', 'isAdmin', 'cabangs'));
+        return view('pages.admin.penempatan', compact('mahasiswas', 'isAdmin', 'cabangs'));
     }
 
     /**

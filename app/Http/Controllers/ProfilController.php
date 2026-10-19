@@ -51,7 +51,7 @@ class ProfilController extends Controller
             ];
         }
 
-        return view('pages.profil', compact('user', 'mahasiswa', 'stats'));
+        return view('pages.mahasiswa.profil', compact('user', 'mahasiswa', 'stats'));
     }
 
     /**

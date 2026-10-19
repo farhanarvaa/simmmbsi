@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Dashboard Admin/Mentor')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1 id="admin-time-greeting">Dashboard Admin / Mentor</h1>
-        <div class="subtitle">Panel kontrol, monitoring logbook, dan penilaian magang Bank Syariah Indonesia Area Yogyakarta.</div>
-    </div>
-</div>
+<x-topbar title="Dashboard Admin / Mentor" subtitle="Panel kontrol, monitoring logbook, dan penilaian magang Bank Syariah Indonesia Area Yogyakarta." titleId="admin-time-greeting" />
 
 @if (session('success'))
     <div class="flash">

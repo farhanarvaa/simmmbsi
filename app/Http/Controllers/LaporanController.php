@@ -24,7 +24,7 @@ class LaporanController extends Controller
                 return redirect()->route('mahasiswa.dashboard')->with('error', 'Anda belum dapat mengakses laporan akhir. Silakan tunggu hingga Anda ditempatkan di cabang/unit oleh Admin.');
             }
 
-            return view('pages.laporan', compact('mahasiswa', 'isAdmin'));
+            return view('pages.mahasiswa.laporan', compact('mahasiswa', 'isAdmin'));
         }
 
         // Admin: daftar laporan seluruh mahasiswa
@@ -34,7 +34,7 @@ class LaporanController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('pages.laporan', compact('mahasiswas', 'isAdmin'));
+        return view('pages.mahasiswa.laporan', compact('mahasiswas', 'isAdmin'));
     }
 
     public function store(Request $request): RedirectResponse|JsonResponse

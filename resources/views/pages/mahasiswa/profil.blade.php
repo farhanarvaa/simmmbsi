@@ -13,18 +13,8 @@
     $statusMagang = $mahasiswa->status ?? 'non_aktif';
 @endphp
 
-<div class="topbar">
-    <div>
-        <h1>Profil Akun Saya</h1>
-        <div class="subtitle">
-            @if($isAdmin)
-                Kelola informasi akun pengelola, identitas kontak, dan keamanan akun Admin/Mentor BSI.
-            @else
-                Kelola data diri, informasi magang, dan keamanan akun Anda di SIMMM BSI Area Yogyakarta.
-            @endif
-        </div>
-    </div>
-    <div class="topbar-actions">
+<x-topbar title="Profil Akun Saya" :subtitle="$isAdmin ? 'Kelola informasi akun pengelola, identitas kontak, dan keamanan akun Admin/Mentor BSI.' : 'Kelola data diri, informasi magang, dan keamanan akun Anda di SIMMM BSI Area Yogyakarta.'">
+    <x-slot:actions>
         @if($isAdmin)
             <span class="badge badge-ok" style="background:var(--primary-light); color:var(--primary-dark); font-size:12.5px; padding:6px 14px; border-color:#bce3d0;">
                 AKUN ADMIN / MENTOR BSI
@@ -54,8 +44,8 @@
                 &bull; {{ strtoupper(str_replace('_', ' ', $statusPendaftaran)) }}
             </span>
         @endif
-    </div>
-</div>
+    </x-slot:actions>
+</x-topbar>
 
 <div id="flash-container">
     @if (session('success'))

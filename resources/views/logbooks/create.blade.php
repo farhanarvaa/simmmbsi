@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Form Logbook')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>{{ isset($logbook) ? 'Edit Logbook' : 'Input Logbook Kegiatan' }}</h1>
-        <div class="subtitle">Catat detail pekerjaan dan pencapaian harianmu.</div>
-    </div>
-</div>
+<x-topbar :title="isset($logbook) ? 'Edit Logbook' : 'Input Logbook Kegiatan'" subtitle="Catat detail pekerjaan dan pencapaian harianmu." />
 
 <div class="card" style="max-width:780px;">
     <div class="card-header">

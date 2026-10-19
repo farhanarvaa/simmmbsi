@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Lengkapi Profil Akademik')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>Lengkapi Profil Akademik</h1>
-        <div class="subtitle">Tahap 1 dari 3 : Pengisian data identitas akademik sebelum mengunggah berkas pengajuan magang BSI.</div>
-    </div>
-</div>
+<x-topbar title="Lengkapi Profil Akademik" subtitle="Tahap 1 dari 3 : Pengisian data identitas akademik sebelum mengunggah berkas pengajuan magang BSI." />
 
 <div id="flash-container">
     @if (session('warning'))

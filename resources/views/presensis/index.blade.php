@@ -13,12 +13,8 @@
     $hariIniIzinSakit    = !$isAdmin && $presensiHariIni && !$presensiHariIni->jam_masuk;
 @endphp
 
-<div class="topbar">
-    <div>
-        <h1>{{ $isAdmin ? 'Rekap Presensi Mahasiswa' : 'Data Presensi Magang' }}</h1>
-        <div class="subtitle">{{ $isAdmin ? 'Rekapitulasi kehadiran seluruh mahasiswa magang beserta bukti foto yang memiliki watermark waktu & lokasi.' : ($isSelesai ? 'Riwayat kehadiran harian selama pelaksanaan magang.' : 'Rekapitulasi kehadiran mahasiswa magang Bank Syariah Indonesia Area Yogyakarta.') }}</div>
-    </div>
-    <div class="topbar-actions">
+<x-topbar :title="$isAdmin ? 'Rekap Presensi Mahasiswa' : 'Data Presensi Magang'" :subtitle="$isAdmin ? 'Rekapitulasi kehadiran seluruh mahasiswa magang beserta bukti foto yang memiliki watermark waktu & lokasi.' : ($isSelesai ? 'Riwayat kehadiran harian selama pelaksanaan magang.' : 'Rekapitulasi kehadiran mahasiswa magang Bank Syariah Indonesia Area Yogyakarta.')">
+    <x-slot:actions>
         @if($isSelesai)
             <span class="badge badge-ok" style="background:#e7f3ed; color:var(--green); font-weight:700;">Magang Selesai</span>
         @elseif(!$isAdmin)
@@ -37,8 +33,8 @@
                 </button>
             @endif
         @endif
-    </div>
-</div>
+    </x-slot:actions>
+</x-topbar>
 
 <div id="flash-container">
     @if (session('success'))

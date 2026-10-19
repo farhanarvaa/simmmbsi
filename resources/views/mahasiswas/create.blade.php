@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Form Mahasiswa Magang')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>{{ isset($mahasiswa) ? 'Edit Mahasiswa Magang' : 'Tambah Mahasiswa Magang' }}</h1>
-        <div class="subtitle">Kelola informasi data diri dan unit kerja penempatan magang.</div>
-    </div>
-</div>
+<x-topbar :title="isset($mahasiswa) ? 'Edit Mahasiswa Magang' : 'Tambah Mahasiswa Magang'" subtitle="Kelola informasi data diri dan unit kerja penempatan magang." />
 
 <div class="card" style="max-width:850px;">
     <div class="card-header">

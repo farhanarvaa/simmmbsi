@@ -9,19 +9,15 @@
     $isSelesai = !$isAdmin && ($user->mahasiswa?->status === 'selesai');
 @endphp
 
-<div class="topbar">
-    <div>
-        <h1>{{ $isAdmin ? 'Logbook dan Monitoring Mahasiswa' : 'Logbook Kegiatan Harian' }}</h1>
-        <div class="subtitle">{{ $isAdmin ? 'Pantau dan tinjau catatan logbook seluruh mahasiswa magang.' : ($isSelesai ? 'Riwayat lengkap catatan kegiatan dan pencapaian selama magang.' : 'Catatan harian aktivitas dan pencapaian selama magang di Bank Syariah Indonesia Area Yogyakarta.') }}</div>
-    </div>
-    <div class="topbar-actions">
+<x-topbar :title="$isAdmin ? 'Logbook dan Monitoring Mahasiswa' : 'Logbook Kegiatan Harian'" :subtitle="$isAdmin ? 'Pantau dan tinjau catatan logbook seluruh mahasiswa magang.' : ($isSelesai ? 'Riwayat lengkap catatan kegiatan dan pencapaian selama magang.' : 'Catatan harian aktivitas dan pencapaian selama magang di Bank Syariah Indonesia Area Yogyakarta.')">
+    <x-slot:actions>
         @if($isSelesai)
             <span class="badge badge-ok" style="background:#e7f3ed; color:var(--green); font-weight:700;">Magang Selesai</span>
         @elseif(!$isAdmin)
             <button type="button" class="btn btn-solid" onclick="openLogbookModal()">+ Tambah Logbook</button>
         @endif
-    </div>
-</div>
+    </x-slot:actions>
+</x-topbar>
 
 <div id="flash-container">
     @if (session('success'))

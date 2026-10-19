@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Detail Mahasiswa Magang')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>Detail Mahasiswa Magang</h1>
-        <div class="subtitle">Informasi lengkap data mahasiswa (hanya baca).</div>
-    </div>
-</div>
+<x-topbar title="Detail Mahasiswa Magang" subtitle="Informasi lengkap data mahasiswa (hanya baca)." />
 
 <div class="card" style="max-width:850px;">
     <div class="card-header">

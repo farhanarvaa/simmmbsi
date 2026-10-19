@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Unggah Berkas Persyaratan Magang')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>Unggah Berkas Persyaratan Magang</h1>
-        <div class="subtitle">Tahap 2 dari 3 : Unggah dokumen persyaratan magang resmi Bank Syariah Indonesia Area Yogyakarta.</div>
-    </div>
-</div>
+<x-topbar title="Unggah Berkas Persyaratan Magang" subtitle="Tahap 2 dari 3 : Unggah dokumen persyaratan magang resmi Bank Syariah Indonesia Area Yogyakarta." />
 
 <div id="flash-container">
     @if (session('success'))

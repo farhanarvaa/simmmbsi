@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Penempatan Magang BSI')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>{{ $isAdmin ? 'Penempatan Cabang/Unit & Surat Penerimaan Magang' : 'Surat Penerimaan Magang' }}</h1>
-        <div class="subtitle">{{ $isAdmin ? 'Kelola alokasi unit kerja, cetak surat penerimaan resmi, dan kelola periode magang mahasiswa BSI.' : 'Pratinjau dan unduh surat penerimaan magang resmi dari Bank Syariah Indonesia Area Yogyakarta.' }}</div>
-    </div>
-</div>
+<x-topbar :title="$isAdmin ? 'Penempatan Cabang/Unit & Surat Penerimaan Magang' : 'Surat Penerimaan Magang'" :subtitle="$isAdmin ? 'Kelola alokasi unit kerja, cetak surat penerimaan resmi, dan kelola periode magang mahasiswa BSI.' : 'Pratinjau dan unduh surat penerimaan magang resmi dari Bank Syariah Indonesia Area Yogyakarta.'" />
 
 @if (session('success'))
     <div class="flash">

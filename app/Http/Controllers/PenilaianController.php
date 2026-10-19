@@ -26,7 +26,7 @@ class PenilaianController extends Controller
                 ->latest()
                 ->paginate(10);
 
-            return view('pages.penilaian', compact('mahasiswas'));
+            return view('pages.admin.penilaian', compact('mahasiswas'));
         }
 
         // Mahasiswa: cek apakah sudah ditempatkan
@@ -39,7 +39,7 @@ class PenilaianController extends Controller
                 ->with('error', 'Anda belum dapat melihat penilaian. Silakan tunggu hingga Anda ditempatkan di cabang/unit oleh Admin.');
         }
 
-        return view('pages.penilaian', compact('mahasiswa'));
+        return view('pages.admin.penilaian', compact('mahasiswa'));
     }
 
     /**

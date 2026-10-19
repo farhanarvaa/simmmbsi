@@ -8,12 +8,7 @@
 {{-- ============================================================ --}}
 {{-- TAMPILAN ADMIN/MENTOR                                        --}}
 {{-- ============================================================ --}}
-<div class="topbar">
-    <div>
-        <h1>Penilaian Mahasiswa Magang</h1>
-        <div class="subtitle">Lihat seluruh mahasiswa dari semua status dan berikan penilaian akhir bagi yang telah menyelesaikan magang.</div>
-    </div>
-</div>
+<x-topbar title="Penilaian Mahasiswa Magang" subtitle="Lihat seluruh mahasiswa dari semua status dan berikan penilaian akhir bagi yang telah menyelesaikan magang." />
 
 @if (session('success'))
     <div class="flash">{{ session('success') }}</div>
@@ -296,12 +291,7 @@ function updateNilaiAkhir() {
 {{-- ============================================================ --}}
 {{-- TAMPILAN MAHASISWA (read-only)                              --}}
 {{-- ============================================================ --}}
-<div class="topbar">
-    <div>
-        <h1>Penilaian Magang Saya</h1>
-        <div class="subtitle">Lihat hasil evaluasi akhir dari Admin/Mentor BSI Cabang.</div>
-    </div>
-</div>
+<x-topbar title="Penilaian Magang Saya" subtitle="Lihat hasil evaluasi akhir dari Admin/Mentor BSI Cabang." />
 
 @if (session('error'))
     <div class="flash" style="background:var(--danger-bg); color:var(--danger); border-color:#efc0b9;">{{ session('error') }}</div>

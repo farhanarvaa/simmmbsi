@@ -59,12 +59,7 @@
 @endphp
 
 {{-- Header Halaman --}}
-<div class="topbar">
-    <div>
-        <h1>Dashboard Mahasiswa</h1>
-        <div class="subtitle">Portal administrasi dan aktivitas magang Bank Syariah Indonesia Area Yogyakarta.</div>
-    </div>
-</div>
+<x-topbar title="Dashboard Mahasiswa" subtitle="Portal administrasi dan aktivitas magang Bank Syariah Indonesia Area Yogyakarta." />
 
 {{-- Alert Notifikasi Session --}}
 @if (session('success'))

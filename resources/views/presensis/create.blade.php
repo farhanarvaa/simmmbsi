@@ -3,12 +3,7 @@
 @section('title', 'SIMMM - Form Presensi')
 
 @section('content')
-<div class="topbar">
-    <div>
-        <h1>{{ isset($presensi) ? 'Edit Presensi' : 'Input Presensi Harian' }}</h1>
-        <div class="subtitle">Isi data kehadiran, lokasi kegiatan, dan unggah foto bukti presensi yang memiliki watermark waktu & lokasi.</div>
-    </div>
-</div>
+<x-topbar :title="isset($presensi) ? 'Edit Presensi' : 'Input Presensi Harian'" subtitle="Isi data kehadiran, lokasi kegiatan, dan unggah foto bukti presensi yang memiliki watermark waktu & lokasi." />
 
 <div class="card" style="max-width:780px;">
     <div class="card-header">

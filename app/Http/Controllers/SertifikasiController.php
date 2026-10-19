@@ -32,7 +32,7 @@ class SertifikasiController extends Controller
                 ->latest()
                 ->paginate(10);
 
-            return view('pages.sertifikasi', compact('mahasiswas', 'isAdmin'));
+            return view('pages.admin.sertifikasi', compact('mahasiswas', 'isAdmin'));
         }
 
         $mahasiswa = Mahasiswa::with(['penilaian.admin', 'user', 'suratKeterangan'])
@@ -43,7 +43,7 @@ class SertifikasiController extends Controller
             return redirect()->route('mahasiswa.dashboard')->with('error', 'Anda belum dapat mengakses sertifikasi. Silakan tunggu hingga Anda ditempatkan di cabang/unit oleh Admin.');
         }
 
-        return view('pages.sertifikasi', [
+        return view('pages.admin.sertifikasi', [
             'mahasiswa' => $mahasiswa,
             'isAdmin' => $isAdmin,
         ]);
@@ -98,7 +98,7 @@ class SertifikasiController extends Controller
             $duration = trim(($interval->y ? $interval->y . ' tahun ' : '') . ($interval->m ? $interval->m . ' bulan ' : '') . ($interval->d ? $interval->d . ' hari' : '')) ?: '0 hari';
             $logoPath = public_path('images/logo_bsi.png');
             $logoData = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : '';
-            $pdf = Pdf::loadView('pdf.surat-keterangan', compact('mahasiswa', 'surat', 'duration', 'logoData') + [
+            $pdf = Pdf::loadView('pdf.suratketerangan', compact('mahasiswa', 'surat', 'duration', 'logoData') + [
                 'startDate' => $start->translatedFormat('d F Y'),
                 'endDate' => $end->translatedFormat('d F Y'),
             ])->setPaper('a4', 'portrait');
