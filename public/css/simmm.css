@@ -586,6 +586,95 @@ nav[role="navigation"] svg { width:16px !important; height:16px !important; }
     50% { transform: scale(1.03); }
 }
 
+/* ==========================================================================
+   Pagination Component
+   ========================================================================== */
+.pagination-container {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.simmm-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 0 4px 0;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+.simmm-pagination-info {
+    font-size: 13.5px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.simmm-pagination-info span,
+.simmm-pagination-info .font-medium {
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.simmm-pagination-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.simmm-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    text-decoration: none;
+    transition: all 0.15s ease-in-out;
+    user-select: none;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.simmm-page-btn:hover:not(.disabled):not(.active):not(.dots) {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-color: #bce3d0;
+}
+
+.simmm-page-btn.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0, 130, 123, 0.3);
+    cursor: default;
+}
+
+.simmm-page-btn.disabled {
+    color: #94A3B8;
+    background: #F8FAFC;
+    border-color: var(--line);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.simmm-page-btn.dots {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: default;
+    min-width: 24px;
+    padding: 0 4px;
+    box-shadow: none;
+}
+
 @media (max-width: 900px) {
     .app-shell { grid-template-columns: 1fr; }
     .mobile-header { display: flex; }
@@ -617,6 +706,12 @@ nav[role="navigation"] svg { width:16px !important; height:16px !important; }
     div[style*="grid-template-columns:1fr 1fr"],
     div[style*="grid-template-columns: 1fr 1fr"] {
         grid-template-columns: 1fr !important;
+    }
+    .simmm-pagination {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        text-align: center;
     }
 }
 

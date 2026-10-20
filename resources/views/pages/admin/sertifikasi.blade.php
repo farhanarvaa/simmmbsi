@@ -136,7 +136,7 @@
                             $pen = $mhs->penilaian;
                             $surat = $mhs->suratKeterangan;
                             $canIssue = $pen
-                                && collect(['nilai_kedisiplinan', 'nilai_kerjasama', 'nilai_inisiatif', 'nilai_kualitas_kerja', 'nilai_komunikasi'])->every(fn ($field) => $pen->{$field} !== null)
+                                && $pen->nilai_akhir !== null
                                 && filled($mhs->nama_lengkap) && filled($mhs->nim) && filled($mhs->jurusan)
                                 && filled($mhs->fakultas) && filled($mhs->universitas)
                                 && filled($mhs->tanggal_mulai) && filled($mhs->tanggal_selesai);
@@ -189,7 +189,7 @@
         </div>
 
         @if($mahasiswas->hasPages())
-            <div style="margin-top:20px; display:flex; justify-content:center;">
+            <div class="pagination-container">
                 {{ $mahasiswas->links() }}
             </div>
         @endif

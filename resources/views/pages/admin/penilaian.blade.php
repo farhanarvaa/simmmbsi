@@ -127,6 +127,16 @@
                                 <div style="text-align:center;">
                                     <div style="font-size:22px; font-weight:800; color:var(--primary);">{{ number_format($mhs->penilaian->nilai_akhir, 1) }}</div>
                                     <span class="badge badge-ok" style="font-size:11px;">Predikat {{ $mhs->penilaian->predikat }}</span>
+                                    @if($mhs->penilaian->file_formulir_kampus)
+                                        <div style="margin-top:6px;">
+                                            <a href="{{ route('penilaian.formulir', $mhs->penilaian->id) }}" target="_blank" style="font-size:11px; color:var(--primary); text-decoration:none; display:inline-flex; align-items:center; gap:4px; font-weight:600;">
+                                                <svg style="width:13px; height:13px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                Formulir Kampus
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
                             @else
                                 <span style="font-size:13px; color:var(--muted);">Belum dinilai</span>
@@ -157,7 +167,7 @@
         </div>
 
         @if($mahasiswas->hasPages())
-            <div style="margin-top:20px; display:flex; justify-content:center;">
+            <div class="pagination-container">
                 {{ $mahasiswas->links() }}
             </div>
         @endif
@@ -166,65 +176,85 @@
 
 {{-- Modal Penilaian --}}
 <div id="penilaian-modal" class="modal-overlay" aria-hidden="true">
-    <div class="modal-box" style="max-width:520px;" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:540px;" role="dialog" aria-modal="true">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
             <div class="modal-title" style="margin:0;">Penilaian Akhir Magang</div>
             <button type="button" onclick="closePenilaianModal()" style="background:none; border:none; cursor:pointer; color:var(--muted); font-size:20px;">&times;</button>
         </div>
         <div id="penilaian-mhs-info" style="font-size:13px; color:var(--muted); margin-bottom:18px;"></div>
 
-        <form id="form-penilaian" action="{{ route('penilaian.store') }}" method="POST">
+        <form id="form-penilaian" action="{{ route('penilaian.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="mahasiswa_id" id="penilaian-mahasiswa-id">
 
-            {{-- 5 Aspek Penilaian --}}
-            @php
-                $aspeks = [
-                    'nilai_kedisiplinan'   => 'Kedisiplinan',
-                    'nilai_kerjasama'      => 'Kerjasama Tim',
-                    'nilai_inisiatif'      => 'Inisiatif & Kreativitas',
-                    'nilai_kualitas_kerja' => 'Kualitas Kerja',
-                    'nilai_komunikasi'     => 'Komunikasi',
-                ];
-            @endphp
-
-            <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:18px;">
-                @foreach($aspeks as $field => $label)
+            {{-- Input Nilai Akhir & Predikat Otomatis --}}
+            <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:14px; margin-bottom:18px; align-items:start;">
                 <div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                        <label style="font-size:13px; font-weight:600;">{{ $label }}</label>
-                        <span id="display-{{ $field }}" style="font-size:14px; font-weight:700; color:var(--primary); min-width:36px; text-align:right;">80</span>
-                    </div>
+                    <label for="input-nilai-akhir" style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">
+                        Nilai Akhir (0 - 100) <span style="color:var(--danger);">*</span>
+                    </label>
                     <input
-                        type="range"
-                        name="{{ $field }}"
-                        id="input-{{ $field }}"
-                        min="0" max="100" value="80"
-                        oninput="document.getElementById('display-{{ $field }}').textContent = this.value; updateNilaiAkhir();"
-                        style="width:100%; accent-color:var(--primary); height:6px; cursor:pointer;"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="100"
+                        name="nilai_akhir"
+                        id="input-nilai-akhir"
+                        required
+                        placeholder="Contoh: 85.50"
+                        oninput="updateNilaiDanPredikat()"
+                        style="width:100%; border:1px solid var(--line); border-radius:6px; padding:10px 12px; font-size:15px; font-weight:600; font-family:'Inter',sans-serif;"
                     >
-                    <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:2px;">
-                        <span>0 (Sangat Kurang)</span><span>100 (Sangat Baik)</span>
+                    <div style="font-size:11.5px; color:var(--muted); margin-top:4px;">Skala nilai: 0 sampai 100</div>
+                </div>
+
+                {{-- Preview Predikat Otomatis --}}
+                <div style="background:var(--primary-light,#eff6ff); border:1px solid var(--line); border-radius:6px; padding:10px 14px; text-align:center;">
+                    <div style="font-size:11.5px; color:var(--muted); margin-bottom:4px; font-weight:600; text-transform:uppercase; letter-spacing:.05em;">Predikat</div>
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+                        <span id="preview-predikat" class="badge badge-ok" style="font-size:16px; font-weight:800; padding:4px 14px;">—</span>
+                        <span id="preview-predikat-label" style="font-size:11.5px; color:var(--muted); font-weight:500;">Masukkan nilai</span>
                     </div>
                 </div>
-                @endforeach
             </div>
 
-            {{-- Preview Nilai Akhir --}}
-            <div style="background:var(--primary-light,#eff6ff); border:1px solid var(--line); border-radius:8px; padding:14px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between;">
-                <div>
-                    <div style="font-size:12px; color:var(--muted); margin-bottom:2px;">Nilai Akhir (Rata-rata)</div>
-                    <div id="preview-nilai-akhir" style="font-size:26px; font-weight:800; color:var(--primary);">80.00</div>
+            {{-- Upload Formulir Penilaian dari Kampus --}}
+            <div style="margin-bottom:18px;">
+                <label for="input-file-formulir" style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">
+                    Formulir Penilaian dari Kampus <span id="label-file-required" style="color:var(--danger);">*</span>
+                </label>
+                <input
+                    type="file"
+                    name="file_formulir_kampus"
+                    id="input-file-formulir"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    style="width:100%; border:1px solid var(--line); border-radius:6px; padding:8px 10px; font-size:13px; background:#fff;"
+                >
+                <div id="file-help-text" style="font-size:11.5px; color:var(--muted); margin-top:4px;">
+                    Unggah hasil scan/foto formulir penilaian resmi kampus yang sudah diisi BSI (PDF, JPG, PNG, maks. 5MB).
                 </div>
-                <div style="text-align:right;">
-                    <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">Predikat</div>
-                    <span id="preview-predikat" class="badge badge-ok" style="font-size:15px; padding:4px 12px;">B</span>
+                <div id="preview-file-existing" style="display:none; margin-top:8px; padding:8px 12px; background:var(--bg,#f8fafc); border:1px dashed var(--line); border-radius:6px; font-size:12px;">
+                    <span style="color:var(--muted);">File saat ini:</span>
+                    <a id="link-file-existing" href="#" target="_blank" style="color:var(--primary); font-weight:600; text-decoration:none; margin-left:4px;">
+                        📄 Lihat Formulir Penilaian Kampus
+                    </a>
                 </div>
             </div>
 
-            <div style="margin-bottom:16px;">
-                <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Catatan Mentor <span style="font-weight:400; color:var(--muted);">(Opsional)</span></label>
-                <textarea name="catatan_mentor" id="penilaian-catatan" placeholder="Tambahkan catatan evaluasi, saran, atau komentar untuk mahasiswa ini..." style="width:100%; border:1px solid var(--line); border-radius:4px; padding:10px 12px; font-size:13.5px; min-height:80px; font-family:'Inter',sans-serif; resize:vertical;"></textarea>
+            {{-- Catatan Mentor (Minimal 10 Karakter) --}}
+            <div style="margin-bottom:18px;">
+                <label for="penilaian-catatan" style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">
+                    Catatan dari Mentor <span style="color:var(--danger);">*</span>
+                    <span style="font-weight:400; color:var(--muted); font-size:11.5px;">(Wajib, minimal 10 karakter)</span>
+                </label>
+                <textarea
+                    name="catatan_mentor"
+                    id="penilaian-catatan"
+                    required
+                    minlength="10"
+                    placeholder="Tuliskan evaluasi performa, apresiasi, atau saran pengembangan bagi mahasiswa selama magang (minimal 10 karakter)..."
+                    style="width:100%; border:1px solid var(--line); border-radius:6px; padding:10px 12px; font-size:13.5px; min-height:85px; font-family:'Inter',sans-serif; resize:vertical; line-height:1.5;"
+                ></textarea>
             </div>
 
             <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--line); padding-top:14px;">
@@ -236,54 +266,74 @@
 </div>
 
 <script>
+function hitungPredikat(nilai) {
+    if (isNaN(nilai) || nilai === '' || nilai === null) {
+        return { predikat: '—', label: 'Masukkan nilai', className: 'badge' };
+    }
+    const n = parseFloat(nilai);
+    if (n >= 85) return { predikat: 'A', label: 'Sangat Baik', className: 'badge badge-ok' };
+    if (n >= 70) return { predikat: 'B', label: 'Baik', className: 'badge badge-ok' };
+    if (n >= 55) return { predikat: 'C', label: 'Cukup', className: 'badge badge-wait' };
+    return { predikat: 'D', label: 'Kurang', className: 'badge badge-danger' };
+}
+
+function updateNilaiDanPredikat() {
+    const input = document.getElementById('input-nilai-akhir');
+    const predEl = document.getElementById('preview-predikat');
+    const labelEl = document.getElementById('preview-predikat-label');
+
+    const result = hitungPredikat(input.value);
+    predEl.textContent = result.predikat;
+    predEl.className = result.className;
+    labelEl.textContent = result.label;
+}
+
 function openPenilaianModal(id, nama, nim, existing) {
     document.getElementById('penilaian-mahasiswa-id').value = id;
     document.getElementById('penilaian-mhs-info').innerHTML =
         '<strong style="color:var(--ink);">' + nama + '</strong> &nbsp;|&nbsp; <span class="mono">' + nim + '</span>';
 
-    const aspeks = ['nilai_kedisiplinan','nilai_kerjasama','nilai_inisiatif','nilai_kualitas_kerja','nilai_komunikasi'];
+    const inputNilai = document.getElementById('input-nilai-akhir');
+    const inputCatatan = document.getElementById('penilaian-catatan');
+    const inputFile = document.getElementById('input-file-formulir');
+    const labelReq = document.getElementById('label-file-required');
+    const helpText = document.getElementById('file-help-text');
+    const previewFile = document.getElementById('preview-file-existing');
+    const linkFile = document.getElementById('link-file-existing');
+
+    inputFile.value = '';
 
     if (existing) {
-        aspeks.forEach(function(k) {
-            const val = existing[k] ?? 80;
-            document.getElementById('input-' + k).value = val;
-            document.getElementById('display-' + k).textContent = val;
-        });
-        document.getElementById('penilaian-catatan').value = existing.catatan_mentor ?? '';
+        inputNilai.value = existing.nilai_akhir ?? '';
+        inputCatatan.value = existing.catatan_mentor ?? '';
+
+        if (existing.file_formulir_kampus) {
+            inputFile.required = false;
+            labelReq.style.display = 'none';
+            helpText.textContent = 'Biarkan kosong jika tidak ingin mengubah formulir yang sudah ada (PDF, JPG, PNG, maks. 5MB).';
+            linkFile.href = '/penilaian/' + existing.id + '/formulir';
+            previewFile.style.display = 'block';
+        } else {
+            inputFile.required = true;
+            labelReq.style.display = 'inline';
+            helpText.textContent = 'Unggah scan/foto formulir penilaian resmi kampus (PDF, JPG, PNG, maks. 5MB).';
+            previewFile.style.display = 'none';
+        }
     } else {
-        aspeks.forEach(function(k) {
-            document.getElementById('input-' + k).value = 80;
-            document.getElementById('display-' + k).textContent = 80;
-        });
-        document.getElementById('penilaian-catatan').value = '';
+        inputNilai.value = '';
+        inputCatatan.value = '';
+        inputFile.required = true;
+        labelReq.style.display = 'inline';
+        helpText.textContent = 'Unggah scan/foto formulir penilaian resmi kampus (PDF, JPG, PNG, maks. 5MB).';
+        previewFile.style.display = 'none';
     }
 
-    updateNilaiAkhir();
+    updateNilaiDanPredikat();
     document.getElementById('penilaian-modal').classList.add('active');
 }
 
 function closePenilaianModal() {
     document.getElementById('penilaian-modal').classList.remove('active');
-}
-
-function updateNilaiAkhir() {
-    const aspeks = ['nilai_kedisiplinan','nilai_kerjasama','nilai_inisiatif','nilai_kualitas_kerja','nilai_komunikasi'];
-    let total = 0;
-    aspeks.forEach(function(k) {
-        total += parseInt(document.getElementById('input-' + k).value || 0);
-    });
-    const avg = total / aspeks.length;
-    document.getElementById('preview-nilai-akhir').textContent = avg.toFixed(2);
-
-    let predikat = 'D';
-    if (avg >= 85) predikat = 'A';
-    else if (avg >= 70) predikat = 'B';
-    else if (avg >= 55) predikat = 'C';
-
-    const predEl = document.getElementById('preview-predikat');
-    predEl.textContent = predikat;
-    predEl.className = 'badge ' + (predikat === 'A' || predikat === 'B' ? 'badge-ok' : 'badge-wait');
-    if (predikat === 'D') predEl.className = 'badge badge-danger';
 }
 </script>
 
@@ -300,12 +350,13 @@ function updateNilaiAkhir() {
 @if($mahasiswa->penilaian)
 @php $p = $mahasiswa->penilaian; @endphp
 
-{{-- Kartu Nilai Akhir --}}
-<div style="display:grid; grid-template-columns:1fr 2fr; gap:20px; margin-bottom:24px;">
-    <div class="card" style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 20px; text-align:center;">
-        <div style="font-size:13px; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.06em;">Nilai Akhir</div>
-        <div style="font-size:56px; font-weight:900; color:var(--primary); line-height:1;">{{ number_format($p->nilai_akhir, 1) }}</div>
-        <div style="margin-top:10px;">
+{{-- Kartu Nilai Akhir & Berkas Formulir Kampus --}}
+<div style="display:grid; grid-template-columns:1fr 1.4fr; gap:20px; margin-bottom:24px;">
+    {{-- Card 1: Nilai Akhir & Predikat --}}
+    <div class="card" style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 24px; text-align:center; margin:0;">
+        <div style="font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.08em;">Nilai Akhir Magang</div>
+        <div style="font-size:56px; font-weight:900; color:var(--primary); line-height:1; letter-spacing:-0.02em;">{{ number_format($p->nilai_akhir, 1) }}</div>
+        <div style="margin-top:12px;">
             @php
                 $predikatColor = match($p->predikat) {
                     'A' => 'var(--green,#16a34a)',
@@ -320,45 +371,52 @@ function updateNilaiAkhir() {
                     default => 'Kurang',
                 };
             @endphp
-            <span style="display:inline-block; background:{{ $predikatColor }}20; color:{{ $predikatColor }}; font-weight:700; font-size:14px; padding:4px 16px; border-radius:20px; border:1px solid {{ $predikatColor }}40;">
+            <span style="display:inline-block; background:{{ $predikatColor }}18; color:{{ $predikatColor }}; font-weight:700; font-size:14px; padding:6px 18px; border-radius:20px; border:1px solid {{ $predikatColor }}35;">
                 Predikat {{ $p->predikat }} — {{ $predikatLabel }}
             </span>
         </div>
-        <div style="font-size:12px; color:var(--muted); margin-top:12px;">
-            Dinilai oleh: <strong>{{ $p->admin->name ?? 'Admin' }}</strong><br>
-            {{ $p->updated_at->format('d M Y') }}
+        <div style="font-size:12px; color:var(--muted); margin-top:16px; border-top:1px solid var(--line); padding-top:12px; width:100%;">
+            Dinilai oleh: <strong style="color:var(--ink);">{{ $p->admin->name ?? 'Admin / Mentor' }}</strong><br>
+            <span style="color:var(--muted);">{{ $p->updated_at->format('d M Y, H:i') }} WIB</span>
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header">
-            <div>
-                <h3>Detail Per Aspek Penilaian</h3>
-                <div class="card-sub">Rincian nilai dari setiap aspek evaluasi.</div>
+    {{-- Card 2: Berkas Formulir Penilaian Kampus --}}
+    <div class="card" style="display:flex; flex-direction:column; justify-content:space-between; padding:28px 24px; margin:0;">
+        <div>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                <div style="width:40px; height:40px; border-radius:8px; background:var(--primary-light,#eff6ff); color:var(--primary); display:flex; align-items:center; justify-content:center;">
+                    <svg style="width:22px; height:22px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 style="margin:0; font-size:17px; font-weight:700;">Formulir Penilaian dari Kampus</h3>
+                    <div style="font-size:12.5px; color:var(--muted); margin-top:2px;">Format resmi evaluasi universitas</div>
+                </div>
             </div>
+
+            <p style="font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin-bottom:18px;">
+                BSI mengisi dan menandatangani formulir evaluasi resmi yang disediakan oleh universitas/fakultas Anda. Silakan lihat atau unduh berkas scan formulir resmi di bawah ini.
+            </p>
         </div>
-        @php
-            $aspeksLabel = [
-                'nilai_kedisiplinan'   => 'Kedisiplinan',
-                'nilai_kerjasama'      => 'Kerjasama Tim',
-                'nilai_inisiatif'      => 'Inisiatif & Kreativitas',
-                'nilai_kualitas_kerja' => 'Kualitas Kerja',
-                'nilai_komunikasi'     => 'Komunikasi',
-            ];
-        @endphp
-        <div style="display:flex; flex-direction:column; gap:14px;">
-            @foreach($aspeksLabel as $field => $label)
-            @php $val = $p->$field; @endphp
-            <div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-                    <span style="font-size:13px; font-weight:600;">{{ $label }}</span>
-                    <span style="font-size:14px; font-weight:700; color:var(--primary);">{{ $val }}<span style="font-size:11px; font-weight:400; color:var(--muted);">/100</span></span>
+
+        <div>
+            @if($p->file_formulir_kampus)
+                <a href="{{ route('penilaian.formulir', $p->id) }}" target="_blank" class="btn btn-solid" style="display:inline-flex; align-items:center; gap:8px; padding:10px 18px; font-size:13.5px; text-decoration:none;">
+                    <svg style="width:18px; height:18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Lihat/Unduh Formulir Penilaian dari Kampus
+                </a>
+                <div style="font-size:11.5px; color:var(--muted); margin-top:8px;">
+                    Format berkas: {{ strtoupper(pathinfo($p->file_formulir_kampus, PATHINFO_EXTENSION)) }} (Tersedia untuk dilihat dan diunduh)
                 </div>
-                <div style="height:8px; background:var(--line); border-radius:99px; overflow:hidden;">
-                    <div style="height:100%; width:{{ $val }}%; background:var(--primary); border-radius:99px; transition:width .5s;"></div>
+            @else
+                <div style="padding:12px; background:var(--bg,#f8fafc); border:1px solid var(--line); border-radius:6px; color:var(--muted); font-size:13px;">
+                    Formulir fisik kampus belum diunggah oleh mentor.
                 </div>
-            </div>
-            @endforeach
+            @endif
         </div>
     </div>
 </div>
@@ -371,7 +429,7 @@ function updateNilaiAkhir() {
             <div class="card-sub">Masukan dan evaluasi dari Admin/Mentor BSI Cabang.</div>
         </div>
     </div>
-    <div style="font-size:14px; color:var(--ink-soft); line-height:1.7; white-space:pre-wrap;">{{ $p->catatan_mentor }}</div>
+    <div style="font-size:14px; color:var(--ink-soft); line-height:1.7; white-space:pre-wrap; background:var(--bg,#f8fafc); border:1px solid var(--line); border-radius:6px; padding:16px;">{{ $p->catatan_mentor }}</div>
 </div>
 @endif
 

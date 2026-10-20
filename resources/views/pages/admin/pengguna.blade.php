@@ -147,7 +147,7 @@
         </div>
 
         @if($users->hasPages())
-            <div style="margin-top:20px; display:flex; justify-content:center;">
+            <div class="pagination-container">
                 {{ $users->links() }}
             </div>
         @endif

@@ -182,7 +182,7 @@
         </div>
 
         @if($mahasiswas->hasPages())
-            <div style="margin-top:20px;display:flex;justify-content:center;">
+            <div class="pagination-container">
                 {{ $mahasiswas->links() }}
             </div>
         @endif

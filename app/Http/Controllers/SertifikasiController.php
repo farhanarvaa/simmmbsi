@@ -144,8 +144,7 @@ class SertifikasiController extends Controller
     {
         $penilaian = $mahasiswa->penilaian;
         return $penilaian
-            && collect(['nilai_kedisiplinan', 'nilai_kerjasama', 'nilai_inisiatif', 'nilai_kualitas_kerja', 'nilai_komunikasi'])
-                ->every(fn (string $field) => $penilaian->{$field} !== null)
+            && $penilaian->nilai_akhir !== null
             && filled($mahasiswa->nama_lengkap)
             && filled($mahasiswa->nim)
             && filled($mahasiswa->jurusan)

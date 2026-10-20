@@ -9,6 +9,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
+
 class PenilaianController extends Controller
 {
     /**
@@ -51,28 +54,32 @@ class PenilaianController extends Controller
             abort(403, 'Hanya Admin/Mentor yang dapat memberikan penilaian.');
         }
 
+        $existing = Penilaian::where('mahasiswa_id', $request->input('mahasiswa_id'))->first();
+
         $validated = $request->validate([
-            'mahasiswa_id'         => ['required', 'exists:mahasiswas,id'],
-            'nilai_kedisiplinan'   => ['required', 'integer', 'min:0', 'max:100'],
-            'nilai_kerjasama'      => ['required', 'integer', 'min:0', 'max:100'],
-            'nilai_inisiatif'      => ['required', 'integer', 'min:0', 'max:100'],
-            'nilai_kualitas_kerja' => ['required', 'integer', 'min:0', 'max:100'],
-            'nilai_komunikasi'     => ['required', 'integer', 'min:0', 'max:100'],
-            'catatan_mentor'       => ['nullable', 'string', 'max:1000'],
+            'mahasiswa_id'          => ['required', 'exists:mahasiswas,id'],
+            'nilai_akhir'           => ['required', 'numeric', 'min:0', 'max:100'],
+            'catatan_mentor'        => ['required', 'string', 'min:10', 'max:1000'],
+            'file_formulir_kampus'  => [
+                $existing && $existing->file_formulir_kampus ? 'nullable' : 'required',
+                'file',
+                'mimes:pdf,jpg,jpeg,png',
+                'max:5120',
+            ],
+        ], [
+            'nilai_akhir.required'          => 'Nilai akhir wajib diisi.',
+            'nilai_akhir.numeric'           => 'Nilai akhir harus berupa angka.',
+            'nilai_akhir.min'               => 'Nilai akhir minimal 0.',
+            'nilai_akhir.max'               => 'Nilai akhir maksimal 100.',
+            'catatan_mentor.required'       => 'Catatan dari mentor wajib diisi.',
+            'catatan_mentor.min'            => 'Catatan dari mentor minimal berisi 10 karakter evaluasi yang jelas.',
+            'file_formulir_kampus.required' => 'Formulir penilaian resmi dari kampus wajib diunggah.',
+            'file_formulir_kampus.mimes'    => 'Format formulir harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'file_formulir_kampus.max'      => 'Ukuran file formulir maksimal 5MB.',
         ]);
 
-        // Hitung nilai akhir (rata-rata 5 aspek)
-        $nilaiAkhir = (
-            $validated['nilai_kedisiplinan'] +
-            $validated['nilai_kerjasama'] +
-            $validated['nilai_inisiatif'] +
-            $validated['nilai_kualitas_kerja'] +
-            $validated['nilai_komunikasi']
-        ) / 5;
-
-        $validated['nilai_akhir'] = round($nilaiAkhir, 2);
-        $validated['predikat']    = Penilaian::hitungPredikat($nilaiAkhir);
-        $validated['admin_id']    = Auth::id();
+        $nilaiAkhir = round((float) $validated['nilai_akhir'], 2);
+        $predikat   = Penilaian::hitungPredikat($nilaiAkhir);
 
         // Pastikan laporan akhir mahasiswa sudah disetujui sebelum dapat dinilai
         $mahasiswa = Mahasiswa::find($validated['mahasiswa_id']);
@@ -81,9 +88,24 @@ class PenilaianController extends Controller
                 ->with('error', 'Penilaian tidak dapat disimpan. Laporan akhir mahasiswa ' . ($mahasiswa->nama_lengkap ?? '') . ' belum disetujui. Setujui laporan akhirnya terlebih dahulu.');
         }
 
+        $payload = [
+            'mahasiswa_id'   => $validated['mahasiswa_id'],
+            'admin_id'       => Auth::id(),
+            'nilai_akhir'    => $nilaiAkhir,
+            'predikat'       => $predikat,
+            'catatan_mentor' => $validated['catatan_mentor'],
+        ];
+
+        if ($request->hasFile('file_formulir_kampus')) {
+            if ($existing && $existing->file_formulir_kampus && Storage::disk('public')->exists($existing->file_formulir_kampus)) {
+                Storage::disk('public')->delete($existing->file_formulir_kampus);
+            }
+            $payload['file_formulir_kampus'] = $request->file('file_formulir_kampus')->store('formulir-penilaian', 'public');
+        }
+
         Penilaian::updateOrCreate(
             ['mahasiswa_id' => $validated['mahasiswa_id']],
-            $validated
+            $payload
         );
 
         // Otomatis update status mahasiswa jadi 'selesai' jika belum
@@ -92,6 +114,35 @@ class PenilaianController extends Controller
         }
 
         return redirect()->route('penilaian.index')
-            ->with('success', 'Penilaian berhasil disimpan. Nilai akhir: ' . $validated['nilai_akhir'] . ' (Predikat ' . $validated['predikat'] . ')');
+            ->with('success', 'Penilaian berhasil disimpan. Nilai akhir: ' . $nilaiAkhir . ' (Predikat ' . $predikat . ')');
+    }
+
+    /**
+     * Lihat atau unduh formulir penilaian resmi kampus.
+     */
+    public function unduhFormulir(Penilaian $penilaian): Response
+    {
+        $user = Auth::user();
+
+        // Autorisasi: Admin atau mahasiswa bersangkutan
+        if ($user->role !== 'admin') {
+            $mahasiswa = Mahasiswa::where('user_id', $user->id)->first();
+            if (!$mahasiswa || $mahasiswa->id !== $penilaian->mahasiswa_id) {
+                abort(403, 'Anda tidak memiliki hak untuk melihat berkas penilaian ini.');
+            }
+        }
+
+        if (!$penilaian->file_formulir_kampus || !Storage::disk('public')->exists($penilaian->file_formulir_kampus)) {
+            abort(404, 'File formulir penilaian kampus tidak ditemukan atau belum diunggah.');
+        }
+
+        $path = Storage::disk('public')->path($penilaian->file_formulir_kampus);
+        $mime = Storage::disk('public')->mimeType($penilaian->file_formulir_kampus) ?? 'application/octet-stream';
+        $filename = 'Formulir-Penilaian-' . str()->slug($penilaian->mahasiswa?->nama_lengkap ?? 'mahasiswa') . '.' . pathinfo($path, PATHINFO_EXTENSION);
+
+        return response()->file($path, [
+            'Content-Type' => $mime,
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
+        ]);
     }
 }

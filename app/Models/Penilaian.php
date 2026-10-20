@@ -15,13 +15,9 @@ class Penilaian extends Model
     protected $fillable = [
         'mahasiswa_id',
         'admin_id',
-        'nilai_kedisiplinan',
-        'nilai_kerjasama',
-        'nilai_inisiatif',
-        'nilai_kualitas_kerja',
-        'nilai_komunikasi',
         'nilai_akhir',
         'predikat',
+        'file_formulir_kampus',
         'catatan_mentor',
     ];
 

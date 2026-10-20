@@ -215,7 +215,7 @@
         </div>
 
         @if($mahasiswas->hasPages())
-            <div style="margin-top:20px; display:flex; justify-content:center;">
+            <div class="pagination-container">
                 {{ $mahasiswas->links() }}
             </div>
         @endif
@@ -242,8 +242,8 @@
                 <div style="margin-bottom:16px;">
                     <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Keputusan Verifikasi <span style="color:var(--danger);">*</span></label>
                     <select name="status_laporan_akhir" id="modal-lap-status" required style="width:100%; border:1px solid var(--line); border-radius:6px; padding:10px 12px; font-size:14px; font-family:'Inter',sans-serif; background:#fff;">
-                        <option value="disetujui">✓ Setujui Laporan Akhir</option>
-                        <option value="revisi">↩ Minta Revisi Laporan</option>
+                        <option value="disetujui">Setujui</option>
+                        <option value="revisi">Minta Revisi</option>
                     </select>
                 </div>
 

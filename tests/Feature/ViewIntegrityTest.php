@@ -200,4 +200,41 @@ class ViewIntegrityTest extends TestCase
         $this->assertStringContainsString('PDF Test Mhs', $html);
         $this->assertStringContainsString('BSI/YOG/2026/001', $html);
     }
+
+    public function test_pagination_renders_single_clean_set_without_duplicate_previous_next(): void
+    {
+        $admin = User::create([
+            'name' => 'Admin Paginasi',
+            'email' => 'admin_page@bsi.co.id',
+            'password' => bcrypt('password'),
+            'role' => 'admin',
+        ]);
+
+        // Buat 15 user admin untuk memicu paginasi (paginate(10))
+        for ($i = 1; $i <= 14; $i++) {
+            User::create([
+                'name' => "Admin Ke-{$i}",
+                'email' => "admin{$i}@bsi.co.id",
+                'password' => bcrypt('password'),
+                'role' => 'admin',
+            ]);
+        }
+
+        $response = $this->actingAs($admin)->get('/pengguna');
+        $response->assertStatus(200);
+
+        $content = $response->getContent();
+
+        // Harus ada pagination component kami
+        $this->assertStringContainsString('simmm-pagination', $content);
+        $this->assertStringContainsString('simmm-pagination-info', $content);
+        $this->assertStringContainsString('simmm-pagination-nav', $content);
+        $this->assertStringContainsString('simmm-page-btn active', $content);
+
+        // Memastikan teks duplikat "« Previous" dan "Next »" TIDAK ADA
+        $this->assertStringNotContainsString('« Previous', $content);
+        $this->assertStringNotContainsString('Next »', $content);
+        $this->assertStringNotContainsString('&laquo; Previous', $content);
+        $this->assertStringNotContainsString('Next &raquo;', $content);
+    }
 }

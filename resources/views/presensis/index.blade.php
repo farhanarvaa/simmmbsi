@@ -138,7 +138,7 @@
             </div>
 
             @if($presensis->hasPages())
-                <div style="margin-top:20px; display:flex; justify-content:center;">
+                <div class="pagination-container">
                     {{ $presensis->links() }}
                 </div>
             @endif

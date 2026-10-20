@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     // Menu Penilaian
     Route::get('/penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
     Route::post('/penilaian', [PenilaianController::class, 'store'])->name('penilaian.store')->middleware('role:admin');
+    Route::get('/penilaian/{penilaian}/formulir', [PenilaianController::class, 'unduhFormulir'])->name('penilaian.formulir');
 
     // Menu Laporan Akhir
     Route::get('/laporan', [\App\Http\Controllers\LaporanController::class, 'index'])->name('laporan.index');

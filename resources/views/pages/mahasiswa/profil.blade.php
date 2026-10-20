@@ -14,37 +14,6 @@
 @endphp
 
 <x-topbar title="Profil Akun Saya" :subtitle="$isAdmin ? 'Kelola informasi akun pengelola, identitas kontak, dan keamanan akun Admin/Mentor BSI.' : 'Kelola data diri, informasi magang, dan keamanan akun Anda di SIMMM BSI Area Yogyakarta.'">
-    <x-slot:actions>
-        @if($isAdmin)
-            <span class="badge badge-ok" style="background:var(--primary-light); color:var(--primary-dark); font-size:12.5px; padding:6px 14px; border-color:#bce3d0;">
-                AKUN ADMIN / MENTOR BSI
-            </span>
-        @elseif($statusMagang === 'selesai')
-            <span class="badge badge-ok" style="background:#e7f3ed; color:var(--green); font-weight:700; font-size:12.5px; padding:6px 14px;">
-                MAGANG SELESAI / LULUS
-            </span>
-        @elseif($statusPendaftaran === 'ditempatkan')
-            <span class="badge badge-ok" style="background:var(--primary-light); color:var(--primary-dark); font-weight:700; font-size:12.5px; padding:6px 14px;">
-                MAGANG AKTIF &mdash; {{ strtoupper($mahasiswa->cabang?->nama ?? 'BSI Area YOGYAKARTA') }}
-            </span>
-        @elseif($statusPendaftaran === 'diajukan')
-            <span class="badge badge-wait" style="font-size:12.5px; padding:6px 14px;">
-                MENUNGGU VERIFIKASI CABANG
-            </span>
-        @elseif($statusPendaftaran === 'diterima')
-            <span class="badge badge-ok" style="font-size:12.5px; padding:6px 14px;">
-                DITERIMA CABANG (PROSES PENEMPATAN)
-            </span>
-        @elseif($statusPendaftaran === 'belum_daftar')
-            <span class="badge badge-wait" style="font-size:12.5px; padding:6px 14px;">
-                BELUM MENGAJUKAN MAGANG
-            </span>
-        @else
-            <span class="badge badge-wait" style="font-size:12.5px; padding:6px 14px;">
-                &bull; {{ strtoupper(str_replace('_', ' ', $statusPendaftaran)) }}
-            </span>
-        @endif
-    </x-slot:actions>
 </x-topbar>
 
 <div id="flash-container">
@@ -440,7 +409,7 @@
                                 @elseif($statusPendaftaran === 'ditempatkan')
                                     Magang Berjalan Aktif
                                 @elseif($statusPendaftaran === 'belum_daftar')
-                                    Belum Mengajukan Pendaftaran
+                                    BELUM MENGAJUKAN MAGANG
                                 @else
                                     Dalam Proses Verifikasi
                                 @endif
