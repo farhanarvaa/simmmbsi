@@ -237,64 +237,213 @@
         .hero{
             position:relative;
             width: 100%;
-            height: calc(100vh - 76px);
-            min-height: 500px;
-            padding: clamp(20px, 3vw, 36px) clamp(20px, 4vw, 48px) 0;
-            background: 
-                radial-gradient(700px 350px at 90% 15%, rgba(0, 130, 123, 0.12), transparent 70%),
-                radial-gradient(550px 300px at 75% 85%, rgba(232, 123, 36, 0.08), transparent 65%),
-                radial-gradient(450px 220px at 15% 90%, rgba(232, 123, 36, 0.04), transparent 60%);
+            min-height: calc(100vh - 76px);
+            padding: clamp(32px, 4vw, 56px) clamp(20px, 4vw, 48px);
+            background-color: #FFFFFF;
+            background-image: 
+                linear-gradient(180deg, rgba(255,255,255,0) 82%, rgba(248,250,252,0.95) 100%),
+                linear-gradient(90deg, 
+                    #FFFFFF 0%, 
+                    #FFFFFF 36%, 
+                    rgba(255,255,255,0.96) 48%, 
+                    rgba(255,255,255,0.72) 64%, 
+                    rgba(255,255,255,0.22) 82%, 
+                    rgba(255,255,255,0.02) 100%
+                ),
+                url('/images/gedung_bsi_yogyakarta.jpg');
+            background-size: cover;
+            background-position: right center;
+            background-repeat: no-repeat;
             display:flex;
             flex-direction: column;
-            justify-content: space-between;
-
+            justify-content: center;
             overflow: hidden;
         }
         .hero-inner{
-            flex: 1;
+            width: 100%;
+            max-width: 1280px;
             display:grid;
-            grid-template-columns: minmax(0, 1.1fr) minmax(230px, 0.7fr);
+            grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
             gap:40px;
             align-items:center;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-text-block{
+            max-width: 640px;
         }
         .hero-eyebrow{
             display:inline-flex; align-items:center; gap:8px;
             font-family:'IBM Plex Mono', monospace;
-            font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
-            color: var(--primary-dark);
-            background: var(--primary-light);
-            padding:6px 12px;
-            border-radius: 20px;
-            margin-bottom:22px;
+            font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase;
+            font-weight: 600;
+            color: #005E59;
+            background: rgba(0, 130, 123, 0.08);
+            border: 1px solid rgba(0, 130, 123, 0.22);
+            padding:7px 14px;
+            border-radius: 30px;
+            margin-bottom:24px;
             animation: rise .6s ease both;
         }
-        .hero-eyebrow .dot{ width:6px; height:6px; border-radius:50%; background: var(--bsi-orange); box-shadow: 0 0 6px rgba(232, 123, 36, 0.5); }
+        .hero-eyebrow .dot{ width:7px; height:7px; border-radius:50%; background: var(--bsi-orange); box-shadow: 0 0 8px rgba(232, 123, 36, 0.6); }
         .hero h1{
-            font-size: 52px;
-            line-height: 1.08;
-            font-weight: 600;
-            max-width: 620px;
+            font-size: clamp(38px, 4.3vw, 54px);
+            line-height: 1.1;
+            font-weight: 800;
+            color: #0A192F;
+            letter-spacing: -0.025em;
             animation: rise .7s .05s ease both;
         }
-        .hero h1 em{ font-style: italic; color: var(--primary); font-weight:500; }
+        .hero h1 em{
+            font-style: italic;
+            color: #00827B;
+            font-weight: 800;
+            position: relative;
+        }
         .hero p.lede{
             margin-top:22px;
-            font-size:17px;
-            line-height:1.6;
-            color: var(--ink);
-            max-width: 480px;
+            font-size:16.5px;
+            line-height:1.7;
+            color: #334155;
+            font-weight: 500;
+            max-width: 530px;
             animation: rise .7s .1s ease both;
         }
-        .hero-actions{ display:flex; gap:14px; margin-top:34px; animation: rise .7s .15s ease both; }
-        .hero-note{ margin-top:20px; font-size:13px; color:var(--muted); animation: rise .7s .2s ease both; }
-        .hero-note a{ color:var(--primary); font-weight:600; }
-        @keyframes rise{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform:none; } }
-
-        .hero-visual{ position:relative; display:flex; align-items:flex-start; justify-content:flex-end; padding-right: clamp(0px, 2vw, 24px); }
-        .hero-visual .stamp-wrap{
-            animation: rise .8s .2s ease both, tilt-in 1s .2s ease both;
-            margin-top: 4px;
+        .hero-actions{ display:flex; align-items:center; gap:16px; margin-top:34px; animation: rise .7s .15s ease both; }
+        .btn-hero-cta{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            background: linear-gradient(135deg, #00827B 0%, #005F5A 100%);
+            color: #FFFFFF !important;
+            font-family:'Plus Jakarta Sans', sans-serif;
+            font-size:15.5px;
+            font-weight:700;
+            padding:14px 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 130, 123, 0.3);
+            box-shadow: 0 10px 24px -4px rgba(0, 130, 123, 0.45), 0 2px 6px rgba(0, 0, 0, 0.08);
+            transition: all .25s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor:pointer;
+            text-decoration:none;
         }
+        .btn-hero-cta:hover{
+            background: linear-gradient(135deg, #00968E 0%, #006D67 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px -4px rgba(0, 130, 123, 0.6), 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+        .btn-hero-cta svg{ transition: transform .2s ease; }
+        .btn-hero-cta:hover svg{ transform: translateX(3px); }
+        .hero-btn-secondary{
+            font-size: 14.5px;
+            font-weight: 600;
+            padding: 13px 22px;
+            border: 1px solid rgba(15, 23, 42, 0.16);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #1E293B;
+            border-radius: 12px;
+            transition: all .2s ease;
+        }
+        .hero-btn-secondary:hover{
+            background: #FFFFFF;
+            border-color: #00827B;
+            color: #00827B;
+            transform: translateY(-1px);
+        }
+        .hero-note{ margin-top:22px; font-size:13.5px; color:#475569; font-weight:500; animation: rise .7s .2s ease both; }
+        .hero-note a{ color:#00827B; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+        .hero-note a:hover{ color:#005E59; }
+
+        /* === Glassmorphic Stamp Badge pinned top-right === */
+        .hero-glass-stamp{
+            position: absolute;
+            top: clamp(24px, 3.5vw, 40px);
+            right: clamp(20px, 4vw, 48px);
+            z-index: 10;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 20px 12px 14px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 40px -10px rgba(15, 23, 42, 0.12),
+                0 4px 12px rgba(0, 130, 123, 0.08),
+                inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+            animation: rise .8s .1s ease both;
+            transition: transform .3s ease, box-shadow .3s ease, background .3s ease;
+        }
+        .hero-glass-stamp:hover{
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.84);
+            box-shadow: 
+                0 24px 45px -8px rgba(0, 130, 123, 0.2),
+                0 6px 16px rgba(15, 23, 42, 0.08),
+                inset 0 1.5px 2px #FFFFFF;
+        }
+        .stamp-svg-wrap{
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stamp-svg{
+            display: block;
+            filter: drop-shadow(0 2px 5px rgba(0, 130, 123, 0.12));
+        }
+        .stamp-content{
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .stamp-verified-tag{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #00827B;
+            background: rgba(0, 130, 123, 0.09);
+            padding: 3px 8px;
+            border-radius: 12px;
+            width: fit-content;
+        }
+        .stamp-pulse-dot{
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00827B;
+            box-shadow: 0 0 0 0 rgba(0, 130, 123, 0.7);
+            animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse-ring{
+            0%{ box-shadow: 0 0 0 0 rgba(0, 130, 123, 0.6); }
+            70%{ box-shadow: 0 0 0 6px rgba(0, 130, 123, 0); }
+            100%{ box-shadow: 0 0 0 0 rgba(0, 130, 123, 0); }
+        }
+        .stamp-institution{
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14.5px;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: -0.01em;
+            line-height: 1.25;
+        }
+        .stamp-desc{
+            font-family: 'Inter', sans-serif;
+            font-size: 11.5px;
+            color: #64748B;
+            font-weight: 500;
+        }
+        @keyframes rise{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform:none; } }
         
         /* === Section divider dashed line with subtle gradient === */
         .section-divider{
@@ -507,18 +656,28 @@
         .contact-item a{ font-size:13px; color:var(--primary); font-weight:500; line-height:1.5; display:block; word-break:break-all; }
         .contact-item span{ font-size:13px; color:var(--ink-soft); line-height:1.5; display:block; }
 
-        @media (max-width: 1400px) and (min-width: 901px){
-            .hero-inner{ grid-template-columns: minmax(0, 1.2fr) minmax(200px, 0.6fr); gap:32px; }
-            .hero h1{ font-size: clamp(38px, 3.4vw, 52px); }
-            .hero-visual{ padding-right: clamp(0px, 1vw, 12px); }
-            .hero-visual .stamp-wrap svg{ width: 200px; height: 200px; }
+        @media (max-width: 1200px){
+            .hero-inner{ grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap:28px; }
+            .hero h1{ font-size: clamp(34px, 3.8vw, 48px); }
         }
 
         @media (max-width: 900px){
-            .hero{ padding:64px 24px; }
+            .hero{
+                padding: 44px 24px 56px;
+                min-height: auto;
+                background-image: 
+                    linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.92) 65%, rgba(255,255,255,0.85) 100%),
+                    url('/images/gedung_bsi_yogyakarta.jpg');
+                background-position: center center;
+            }
             .hero-inner{ grid-template-columns:1fr; }
-            .hero h1{ font-size:clamp(30px, 5vw, 36px); }
-            .hero-visual{ align-items:center; justify-content:center; padding-right:0; }
+            .hero-glass-stamp{
+                position: static;
+                margin-bottom: 28px;
+                width: fit-content;
+                max-width: 100%;
+            }
+            .hero h1{ font-size:clamp(30px, 5vw, 38px); }
             .landing-nav nav{ display:none; }
             .flow{ grid-template-columns: 1fr 1fr; row-gap:32px; }
             .flow::before{ display:none; }
@@ -532,6 +691,29 @@
         }
 
         @media (max-width: 560px){
+            .hero{ padding: 32px 18px 44px; }
+            .hero-glass-stamp{
+                padding: 10px 14px;
+                gap: 12px;
+            }
+            .stamp-svg{
+                width: 68px;
+                height: 68px;
+            }
+            .stamp-institution{
+                font-size: 13.5px;
+            }
+            .stamp-desc{
+                font-size: 11px;
+            }
+            .hero-actions{
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-hero-cta, .hero-btn-secondary{
+                width: 100%;
+                text-align: center;
+            }
             .landing-nav{ justify-content:space-between; }
             .landing-nav .nav-actions{ width:100%; justify-content:flex-end; }
             .nav-actions .btn{ padding:9px 12px; font-size:12px; }
@@ -567,7 +749,7 @@
                     <div>
                         <div class="brand-name">SIMMM</div>
                         <div class="brand-sub">BSI AREA YOGYAKARTA</div>
-                        <div class="brand-note">Prototype akademik, bukan aplikasi resmi BSI.</div>
+                        <div class="brand-note">Prototipe akademik, bukan aplikasi resmi BSI.</div>
                     </div>
                 </div>
                 <nav>
@@ -601,36 +783,15 @@
 
         <section class="hero" id="hero">
             <div class="inner hero-inner">
-                <div>
+                <div class="hero-text-block">
                     <h1>Satu berkas, <em>satu pintu</em>, satu status.</h1>
                     <p class="lede">Sistem Informasi Manajemen Mahasiswa Magang atau SIMMM berguna untuk mempermudah proses magang di Bank Syariah Indonesia Area Yogyakarta. Mulai dari pendaftaran sampai penerbitan surat keterangan selesai magang yang nantinya menjadi satu alur yang dapat dipantau kapan saja dan oleh siapa saja yang berkepentingan.</p>
                     <div class="hero-actions">
-                        <a class="btn btn-solid" href="{{ route('register') }}">Daftar Sekarang</a>
+                        <a class="btn-hero-cta" href="{{ route('register') }}">
+                            <span>Daftar Sekarang</span>
+                        </a>
                     </div>
                     <p class="hero-note">Sudah Punya Akun? <a href="{{ route('login') }}">Masuk ke Akun</a></p>
-                </div>
-                <div class="hero-visual">
-                    <div class="stamp-wrap">
-                        <svg class="stamp" width="230" height="230" viewBox="0 0 230 230" overflow="visible">
-                            <defs>
-                                <!--
-                                    r=96 → keliling ≈ 603px
-                                    Teks 44 karakter × (8px font-size + ~2.1 letter-spacing) ≈ 545px → muat
-                                    startOffset=12% → teks dimulai dari titik kiri-bawah lingkaran,
-                                    sehingga jika ada gap, jatuh di sisi kiri-atas (tidak terlihat karena tertutup inner circle)
-                                -->
-                                <path id="circlePath" d="M 115,115 m -96,0 a 96,96 0 1,1 192,0 a 96,96 0 1,1 -192,0" />
-                            </defs>
-                            <circle class="ring" cx="115" cy="115" r="107" stroke-width="1.5"/>
-                            <circle class="ring" cx="115" cy="115" r="80" stroke-width="1.5"/>
-                            <text font-size="8.5" letter-spacing="2.1">
-                                <textPath href="#circlePath" startOffset="12%">SISTEM INFORMASI MANAJEMEN MAHASISWA MAGANG</textPath>
-                            </text>
-                            <text x="115" y="106" text-anchor="middle" font-size="14" fill="var(--primary)" font-family="Plus Jakarta Sans, sans-serif" font-weight="700">TERVERIFIKASI</text>
-                            <text x="115" y="125" text-anchor="middle" font-size="10" fill="var(--muted)" letter-spacing="1.5">BSI · AREA YOGYAKARTA</text>
-                            <path d="M98 140 l11 11 l24 -24" stroke="var(--primary)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
                 </div>
             </div>
         </section>

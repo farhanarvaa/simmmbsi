@@ -19,17 +19,6 @@
         $userInitials = collect(explode(' ', trim($userName)))->filter()->map(fn($part) => strtoupper(substr($part, 0, 1)))->take(2)->implode('');
         $dashboardRoute = $userRole === 'admin' ? route('admin.dashboard') : route('mahasiswa.dashboard');
     @endphp
-
-    <!-- Mobile Header Navigation -->
-    <div class="mobile-header">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <img src="{{ asset('images/logo_bsi.png') }}" alt="Logo BSI" style="height:28px;">
-            <span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:15px; color:#fff;">SIMMM BSI</span>
-        </div>
-        <button type="button" class="mobile-toggle" id="sidebar-toggle" aria-label="Buka Menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-    </div>
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <div class="app-shell">
@@ -50,25 +39,56 @@
                 @endif
             </nav>
 
-            <div class="sb-foot">
-                <a href="{{ route('profil.show') }}" class="sb-user-menu-btn {{ request()->routeIs('profil.*') ? 'active' : '' }}">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <span>Lihat Profil Saya</span>
-                </a>
-                
-                <form method="POST" action="{{ route('logout') }}" data-confirm="Apakah Anda yakin ingin keluar dari akun SIMMM BSI?" data-title="Konfirmasi Keluar" data-button="Ya, Keluar Akun">
-                    @csrf
-                    <button type="submit" class="sb-user-menu-btn sb-user-menu-btn-danger">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        <span style="font-weight:600;">Keluar</span>
-                    </button>
-                </form>
-            </div>
         </aside>
 
-        <main class="main page-transition-root">
-            @yield('content')
-        </main>
+        <div class="content-col">
+            <nav class="global-navbar" id="global-navbar">
+                <div class="gnav-left">
+                    <button type="button" class="gnav-hamburger" id="sidebar-toggle" aria-label="Buka Menu">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </button>
+                </div>
+
+                <div class="gnav-right">
+                    <div class="gnav-profile" id="gnav-profile">
+                        <button type="button" class="gnav-profile-btn" id="gnav-profile-btn" aria-expanded="false" aria-haspopup="true">
+                            <div class="gnav-avatar">{{ $userInitials }}</div>
+                            <div class="gnav-user-meta">
+                                <span class="gnav-user-name">{{ $userName }}</span>
+                            </div>
+                            <svg class="gnav-chevron" id="gnav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+
+                        <div class="gnav-dropdown" id="gnav-dropdown" role="menu">
+                            <div class="gnav-dd-head">
+                                <div class="gnav-dd-avatar">{{ $userInitials }}</div>
+                                <div>
+                                    <div class="gnav-dd-name">{{ $userName }}</div>
+                                    <div class="gnav-dd-email">{{ $user->email ?? '' }}</div>
+                                </div>
+                            </div>
+                            <div class="gnav-dd-body">
+                                <a href="{{ route('profil.show') }}" class="gnav-dd-item" role="menuitem">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    <span>Lihat Profil</span>
+                                </a>
+                                <form method="POST" action="{{ route('logout') }}" data-confirm="Apakah Anda yakin ingin keluar dari akun SIMMM BSI?" data-title="Konfirmasi Keluar" data-button="Ya, Keluar Akun">
+                                    @csrf
+                                    <button type="submit" class="gnav-dd-item gnav-dd-danger" role="menuitem">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                        <span>Keluar</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="main page-transition-root">
+                @yield('content')
+            </main>
+        </div>
     </div>
 
     <!-- Custom Confirmation Modal System -->

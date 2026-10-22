@@ -159,23 +159,32 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.addEventListener('click', toggleSidebar);
     }
 
-    // Sidebar User Menu Dropdown Toggle
-    const userBtn = document.getElementById('sb-user-btn');
-    const userMenu = document.getElementById('sb-user-menu');
-    const userArrow = document.getElementById('sb-user-arrow');
-    if (userBtn && userMenu) {
-        userBtn.addEventListener('click', (e) => {
+    // Global Navbar Profile Dropdown
+    const profileBtn = document.getElementById('gnav-profile-btn');
+    const profileDropdown = document.getElementById('gnav-dropdown');
+    const profileChevron = document.getElementById('gnav-chevron');
+    if (profileBtn && profileDropdown) {
+        profileBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const isActive = userMenu.classList.toggle('active');
-            userBtn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-            if (userArrow) userArrow.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)';
+            const isActive = profileDropdown.classList.toggle('active');
+            profileBtn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+            if (profileChevron) profileChevron.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)';
         });
 
         document.addEventListener('click', (e) => {
-            if (userMenu.classList.contains('active') && !userMenu.contains(e.target) && !userBtn.contains(e.target)) {
-                userMenu.classList.remove('active');
-                userBtn.setAttribute('aria-expanded', 'false');
-                if (userArrow) userArrow.style.transform = 'rotate(0deg)';
+            if (profileDropdown.classList.contains('active') && !profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                profileDropdown.classList.remove('active');
+                profileBtn.setAttribute('aria-expanded', 'false');
+                if (profileChevron) profileChevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && profileDropdown.classList.contains('active')) {
+                profileDropdown.classList.remove('active');
+                profileBtn.setAttribute('aria-expanded', 'false');
+                if (profileChevron) profileChevron.style.transform = 'rotate(0deg)';
+                profileBtn.focus();
             }
         });
     }
