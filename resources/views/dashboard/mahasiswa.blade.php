@@ -107,10 +107,7 @@
 @endif
 
 
-
-{{-- ============================================================ --}}
 {{-- GRID UTAMA: Alur Program Magang + Informasi & Menu Utama --}}
-{{-- ============================================================ --}}
 <div style="display:flex; flex-direction:column; gap:24px; margin-bottom:24px;">
     {{-- Card 1: Pelacak Progres Program Magang --}}
     <div class="card" style="margin-bottom:0;">
@@ -154,7 +151,7 @@
             <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 18px; background:#F0FDF4; border-radius:8px; margin-top:20px; border:1px solid #BBF7D0;">
                 <div>
                     <div style="font-size:13.5px; color:#166534; font-weight:700;">Program Magang Telah Selesai dan Lulus</div>
-                    <div style="font-size:12px; color:#15803D; margin-top:2px;">Selamat! Seluruh rangkaian kegiatan dan evaluasi magang telah rampung.</div>
+                    <div style="font-size:12px; color:#15803D; margin-top:2px;">Selamat! Seluruh rangkaian kegiatan dan evaluasi magang telah selesai.</div>
                 </div>
                 <div style="display:flex; gap:8px; flex-shrink:0;">
                     <a href="{{ route('sertifikasi.index') }}" class="btn btn-solid btn-sm">Sertifikasi</a>
@@ -229,11 +226,7 @@
         @endif
     </div>
 
-   
-
-{{-- ============================================================ --}}
 {{-- BAGIAN PENGAJUAN PENDAFTARAN MAGANG (POSISI DI BAWAH)        --}}
-{{-- ============================================================ --}}
 @if(!$mahasiswa || $statusPendaftaran === 'belum_daftar' || $statusPendaftaran === 'revisi')
     {{-- Card Besar Tahap 1 & Tahap 2 saat belum daftar atau revisi --}}
     <div class="card" style="border:1.5px solid {{ $statusPendaftaran === 'revisi' ? '#FDE68A' : 'var(--primary-light)' }}; margin-top:24px; margin-bottom:0;">
@@ -242,7 +235,7 @@
                 <h3 style="color:{{ $statusPendaftaran === 'revisi' ? '#92400E' : 'var(--primary-dark)' }};">Pengajuan Pendaftaran Magang</h3>
                 <div class="card-sub">
                     @if($statusPendaftaran === 'revisi')
-                        Perbaiki dan perbarui dokumen pendaftaran magang Anda sesuai catatan pembimbing / admin.
+                        Perbaiki dan perbarui dokumen pendaftaran magang Anda sesuai catatan Admin/Mentor.
                     @else
                         Lengkapi 2 tahapan pendaftaran di bawah ini untuk memulai proses pengajuan magang BSI Area Yogyakarta.
                     @endif
@@ -340,7 +333,7 @@
             </div>
             <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
                 <a href="{{ route('mahasiswa.pendaftaran.berkas') }}" class="btn btn-ghost btn-sm" style="font-size:12.5px; border-color:#93C5FD; color:#1D4ED8; background:#FFFFFF;">
-                    Lihat Berkas Pendaftaran &rarr;
+                    Lihat Berkas Pendaftaran
                 </a>
             </div>
         </div>
@@ -362,7 +355,7 @@
                     </div>
                     <div style="font-size:13px; color:#14532D; margin-top:4px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
                         <span>
-                            Cabang/Unit Penempatan : <strong>{{ $mahasiswa->cabang?->nama ?: 'Menunggu konfirmasi admin' }}</strong>
+                            Unit Penempatan : <strong>{{ $mahasiswa->cabang?->nama ?: 'Menunggu konfirmasi admin' }}</strong>
                         </span>
                         
                         @if($mahasiswa->tanggal_mulai && $mahasiswa->tanggal_selesai)
@@ -392,7 +385,7 @@
             <div>
                 <div style="font-size:15px; font-weight:700; color:#991B1B;">Pendaftaran Magang Tidak Disetujui</div>
                 <div style="font-size:12.5px; color:#B91C1C; margin-top:4px;">
-                    {{ $mahasiswa->catatan_revisi ?: 'Mohon maaf, pendaftaran Anda pada periode ini belum dapat diterima. Silakan hubungi admin cabang untuk informasi lebih lanjut.' }}
+                    {{ $mahasiswa->catatan_revisi ?: 'Mohon maaf, pendaftaran Anda pada periode ini belum dapat diterima. Silakan hubungi admin untuk informasi lebih lanjut.' }}
                 </div>
             </div>
         </div>

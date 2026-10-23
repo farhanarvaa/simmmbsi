@@ -52,7 +52,7 @@
             <div style="display:flex; align-items:center; gap:10px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 <div>
-                    <strong>Terdapat kesalahan pada isian form:</strong>
+                    <strong>Terdapat kesalahan pada isian form :</strong>
                     <ul style="margin:4px 0 0 16px; padding:0;">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -80,10 +80,6 @@
                     <div>
                         <h2 style="font-size:20px; font-weight:700; color:var(--primary-dark); margin:0;">{{ $user->name }}</h2>
                         <div style="display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap;">
-                            <span class="badge badge-ok" style="font-size:10.5px; padding:3px 10px; background:var(--primary-light); color:var(--primary-dark);">
-                                {{ $isAdmin ? 'ADMIN / MENTOR BSI' : strtoupper($userRole) }}
-                            </span>
-                           
                         </div>
                     </div>
                 </div>
@@ -158,7 +154,7 @@
                 @if(!$isAkademikLengkap)
                     <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:12px 16px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
                         <div style="font-size:12.5px; color:#1E40AF; line-height:1.4;">
-                            <strong>Profil Akademik Belum Lengkap:</strong> Silakan lengkapi NIM, Perguruan Tinggi, Fakultas, Program Studi, dan Semester untuk mengajukan pendaftaran magang.
+                            <strong>Profil Akademik Belum Lengkap :</strong> Silakan lengkapi NIM, Perguruan Tinggi, Fakultas, Program Studi, dan Semester untuk mengajukan pendaftaran magang.
                         </div>
                         <a href="{{ route('mahasiswa.profil.lengkapi') }}" class="btn btn-solid btn-sm" style="flex-shrink:0; font-size:12px;">
                             Lengkapi Sekarang
@@ -409,7 +405,7 @@
                                 @elseif($statusPendaftaran === 'ditempatkan')
                                     Magang Berjalan Aktif
                                 @elseif($statusPendaftaran === 'belum_daftar')
-                                    BELUM MENGAJUKAN MAGANG
+                                    Belum Mengajukan Magang
                                 @else
                                     Dalam Proses Verifikasi
                                 @endif
@@ -423,7 +419,7 @@
             <div style="background:var(--amber-bg); border:1px solid #e5cc9c; border-radius:10px; padding:18px; display:flex; gap:14px; align-items:flex-start;">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--amber); flex-shrink:0; margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                 <div style="font-size:12.5px; line-height:1.5; color:var(--ink-soft);">
-                    <div style="font-weight:700; color:var(--amber); font-size:13.5px; margin-bottom:3px;">Catatan Perubahan Data Akademik:</div>
+                    <div style="font-weight:700; color:var(--amber); font-size:13.5px; margin-bottom:3px;">Catatan Perubahan Data Akademik :</div>
                     Perubahan data vital seperti NIM, Nama Lengkap, Perguruan Tinggi, dan Program Studi hanya dapat disesuaikan melalui pengajuan ke <strong>Admin / Mentor BSI Area Yogyakarta</strong>.
                 </div>
             </div>

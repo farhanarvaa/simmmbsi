@@ -17,7 +17,7 @@
         <div style="background:var(--danger-bg); color:var(--danger); border:1px solid #efc0b9; padding:12px 16px; border-radius:8px; margin-bottom:20px; font-size:13.5px;">
             <div style="font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Terdapat kesalahan pada input formulir:
+                Terdapat kesalahan pada input formulir :
             </div>
             <ul style="margin:0; padding-left:18px;">
                 @foreach ($errors->all() as $error)
